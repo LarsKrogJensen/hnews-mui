@@ -7,6 +7,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import classNames from "classnames";
+import {findItems} from "./navigation";
+import {RouteComponentProps, withRouter} from "react-router";
 
 const drawerWidth = 240;
 const miniDrawerWidth = 72;
@@ -17,7 +19,7 @@ const styles = (theme: Theme) => createStyles({
         paddingLeft: 0,
         paddingRight: 24, // keep right padding when drawer closed
         height: 60,
-        minHeight: 60
+        minHeight: 60,
     },
     appBar: {
         marginLeft: miniDrawerWidth,
@@ -45,8 +47,19 @@ const styles = (theme: Theme) => createStyles({
     menuButtonHidden: {
         display: 'none',
     },
-    title: {
+    titles: {
         flexGrow: 1,
+        flexDirection: "row",
+        alignItems: "baseline"
+    },
+    title: {
+        display: 'inline-flex',
+        // flexGrow: 0,
+        marginRight: 8
+    },
+    subTitle: {
+        display: 'inline-flex',
+        // flexGrow: 1,
     },
 });
 
@@ -56,9 +69,10 @@ interface ExternalProps {
     onToggleDrawer: () => void
 }
 
-type Props = ExternalProps & WithStyles<typeof styles>
+type Props = ExternalProps & WithStyles<typeof styles> & RouteComponentProps
 
-const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes}) => {
+const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes, location}) => {
+    const subTitle = findItems(location.pathname).map(navItem => navItem.title).join(" / ")
     return (
         <AppBar
             position="absolute"
@@ -76,15 +90,26 @@ const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes}) => {
                 >
                     <MenuIcon/>
                 </IconButton>
-                <Typography
-                    component="h1"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    className={classes.title}
-                >
-                    Offering Manager
-                </Typography>
+                <div className={classes.titles}>
+                    <Typography
+                        component="h1"
+                        variant="h6"
+                        color="inherit"
+                        noWrap
+                        className={classes.title}
+                    >
+                        Offering Manager
+                    </Typography>
+                    <Typography
+                        component="h1"
+                        variant="subtitle1"
+                        color="inherit"
+                        noWrap
+                        className={classes.subTitle}
+                    >
+                        {subTitle}
+                    </Typography>
+                </div>
                 <IconButton color="inherit">
                     <Badge badgeContent={4} color="secondary">
                         <NotificationsIcon/>
@@ -95,4 +120,4 @@ const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes}) => {
     )
 }
 
-export const HeaderBar: ComponentType<ExternalProps> = withStyles(styles)(_HeaderBar)
+export const HeaderBar: ComponentType<ExternalProps> = withStyles(styles)(withRouter(_HeaderBar))

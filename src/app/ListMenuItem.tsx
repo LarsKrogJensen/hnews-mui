@@ -1,4 +1,4 @@
-import React, {ComponentType, FC} from "react"
+import React, {ComponentType} from "react"
 import {createStyles, Theme, withStyles} from "@material-ui/core";
 import {WithStyles} from "@material-ui/core/es";
 import ListItem, {ListItemProps} from "@material-ui/core/ListItem";
@@ -6,7 +6,16 @@ import ListItem, {ListItemProps} from "@material-ui/core/ListItem";
 const styles = (theme: Theme) => createStyles({
     root: {
         "&$selected": {
-            backgroundColor: theme.palette.secondary.main
+            // backgroundColor: theme.palette.primary.main,
+            '& *': {color: '#fff'},
+        },
+        "&:hover": {
+            // backgroundColor: theme.palette.primary.dark,
+            '& *': {color: '#fff'},
+        },
+        "&:focus": {
+            // backgroundColor: '#0f0',
+            '& *': {color: '#fff'},
         }
     },
     selected: {}
@@ -21,4 +30,4 @@ const _MenuItem: ComponentType<ListItemProps & WithStyles<typeof styles>> = ({ch
     )
 }
 
-export const MenuItem: ComponentType<ListItemProps> = withStyles(styles)(_MenuItem);
+export const ListMenuItem: ComponentType<ListItemProps> = withStyles(styles)(_MenuItem);

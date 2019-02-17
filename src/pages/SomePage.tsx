@@ -1,9 +1,15 @@
 import React from "react";
 import {Typography} from "@material-ui/core";
 
+// export default ({page}: {page: number}) => <Typography variant="body1">Page {page}</Typography>
 
-export default ({page}: {page: number}) => {
+export default ({page}: { page: number }) => {
     return (
-        <Typography variant="body1">Page {page}</Typography>
-    );
+        <div style={{padding: 16}}>
+            {Array(100).fill(0).map(x =>
+                <Typography variant="body1">Page {page} {x}</Typography>
+            )}
+        </div>
+    )
+
 }

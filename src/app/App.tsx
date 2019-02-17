@@ -7,7 +7,7 @@ import {purple} from "@material-ui/core/colors";
 import {HeaderBar} from "./HeaderBar";
 import {HashRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import {NavItem, navItems} from "./navigation";
-
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 const theme = createMuiTheme({
     palette: {
@@ -29,13 +29,15 @@ const theme = createMuiTheme({
 const styles = (theme: Theme) => createStyles({
     root: {
         display: 'flex',
+        height: '100vh',
     },
     appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
-        padding: theme.spacing.unit * 3,
+        padding: 0,
         height: '100vh',
-        overflow: 'auto',
+        // width: `calc(100vh - 16px)`,
+        overflow: 'hidden',
     },
 });
 
@@ -53,10 +55,11 @@ const App = ({classes}: Props) => {
                     <SideNavBar open={drawerOpen}/>
                     <main className={classes.content}>
                         <div className={classes.appBarSpacer}/>
-                        <Switch>
-                            {Array.from(buildRoutes())}
-                        </Switch>
-
+                        <PerfectScrollbar>
+                            <Switch>
+                                {Array.from(buildRoutes())}
+                            </Switch>
+                        </PerfectScrollbar>
                     </main>
                 </div>
             </Router>
@@ -66,14 +69,14 @@ const App = ({classes}: Props) => {
 
 function* buildRoutes(items: NavItem[] = navItems, parentItem: NavItem | undefined = undefined): IterableIterator<ReactElement<any>> {
     for (let item of items) {
-        const path = (parentItem ? parentItem.path : "")  + item.path
+        const path = (parentItem ? parentItem.path : "") + item.path
         if (item.type === "link") {
             console.log(`Link to ${path} page ${item.title}`)
             yield <Route key={path} path={path} component={item.page}/>
         } else {
             console.log(`Group to ${path} page ${item.title}`)
             yield <Redirect key={path} exact path={path} to={path + item.items[0].path}/>
-            yield *buildRoutes(item.items, item)
+            yield* buildRoutes(item.items, item)
         }
     }
 

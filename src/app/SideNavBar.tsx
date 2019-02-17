@@ -1,21 +1,25 @@
 import React, {Component, ComponentType, ReactElement} from "react"
-import classNames from "classnames";
-import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
+import {RouteComponentProps, withRouter} from "react-router";
 import {createStyles, MuiThemeProvider, Theme, withStyles, WithStyles} from '@material-ui/core/styles';
 import createMuiTheme from "@material-ui/core/es/styles/createMuiTheme";
+import classNames from "classnames";
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import {findItems, NavItem, navItems} from "./navigation"
+import {Collapse, ListItemIcon, ListItemText} from "@material-ui/core";
+import {ExpandLess, ExpandMore} from "@material-ui/icons";
+import {ListMenuItem} from "./ListMenuItem";
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import logo from "./logo.svg"
 import logo_small from "./logo_small.svg"
-import {findItems, NavItem, navItems} from "./navigation"
-import {Collapse, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
-import {ExpandLess, ExpandMore} from "@material-ui/icons";
-import {RouteComponentProps, withRouter} from "react-router";
 
 const drawerWidth = 240;
 
 const theme: any = (theme: Theme) => createMuiTheme({
     palette: {
+        primary: theme.palette.primary,
+        secondary: theme.palette.secondary,
         type: 'dark',
     },
     typography: {
@@ -27,17 +31,7 @@ const theme: any = (theme: Theme) => createMuiTheme({
         MuiPaper: {
             root: {
                 backgroundColor: '#343A40',
-            }
-        },
-        MuiTypography: {
-            subheading: {
-                // fontSize: '0.9em',
-                color: '#a1a1a1'
-            }
-        },
-        MuiListItemIcon: {
-            root: {
-                color: '#a1a1a1',
+                '& *': { color: '#a1a1a1' },
             }
         },
         MuiSvgIcon: {
@@ -45,14 +39,11 @@ const theme: any = (theme: Theme) => createMuiTheme({
                 fontSize: 18
             }
         },
-        // MuiListItem: {
-        //     selected: {
-        //         background: '#f00',
-        //         "$focus": {
-        //             background: '#0F0'
-        //         }
-        //     },
-        // }
+        MuiListItemText: {
+            primary: {
+                color: '#a1a1a1',
+            }
+        }
     }
 });
 
@@ -64,6 +55,8 @@ const styles = (theme: Theme) => createStyles(
             borderRight: 0,
             zIndex: 9999,
             width: drawerWidth,
+            height: "100%",
+            overflowY: "hidden",
             transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen,
@@ -85,7 +78,7 @@ const styles = (theme: Theme) => createStyles(
             alignItems: 'center',
             justifyContent: 'center',
             padding: '0 8px',
-            background: theme.palette.primary.main,
+            background: theme.palette.primary.dark,
             height: 60,
             minHeight: 60,
             borderRadius: 0
@@ -95,7 +88,8 @@ const styles = (theme: Theme) => createStyles(
             background: '#2F3439'
         },
         expanded: {
-            background: '#2F3439'
+            background: '#2F3439',
+            '& *': {color: '#fff'},
         },
         secondaryIcon: {
             marginRight: 0
@@ -114,16 +108,6 @@ const styles = (theme: Theme) => createStyles(
             //     duration: theme.transitions.duration.enteringScreen,
             // }),
         },
-        listItemSelected: {
-            root: {
-                '&$selected': {
-                    background: 'rgba(0, 0, 0, 0.12)',
-                    color: 'white',
-                    boxShadow: 'none',
-                },
-            },
-            selected: {}
-        }
     }
 );
 
@@ -160,7 +144,7 @@ class _SideNavBar extends Component<Props, State> {
         }
     }
 
-    handleClick = (expandedPath: string) => this.setState({expandedPath})
+    handleToggleSection = (expandedPath: string) => this.setState({expandedPath})
 
     render() {
         const {classes, open} = this.props;
@@ -175,10 +159,11 @@ class _SideNavBar extends Component<Props, State> {
                         {!open && <img height={40} src={logo_small} alt="logo"/>}
                         {open && <img width={120} src={logo} alt="logo"/>}
                     </div>
-                    <Divider/>
-                    <List>
-                        {Array.from(this.buildNavigationLinks())}
-                    </List>
+                    <PerfectScrollbar>
+                        <List>
+                            {Array.from(this.buildNavigationLinks())}
+                        </List>
+                    </PerfectScrollbar>
                 </Drawer>
             </MuiThemeProvider>
         )
@@ -191,9 +176,9 @@ class _SideNavBar extends Component<Props, State> {
             const path = (parentItem ? parentItem.path : "") + item.path
             if (item.type === "group") {
                 yield (
-                    <ListItem key={path}
+                    <ListMenuItem key={path}
                               button
-                              onClick={() => this.handleClick(this.state.expandedPath === path ? "" : path)}
+                              onClick={() => this.handleToggleSection(this.state.expandedPath === path ? "" : path)}
                               className={this.state.expandedPath === path ? this.props.classes.expanded : ""}
                               selected={false}>
                         <ListItemIcon>
@@ -203,7 +188,7 @@ class _SideNavBar extends Component<Props, State> {
                         <ListItemIcon className={this.props.classes.secondaryIcon}>
                             {this.state.expandedPath === path ? <ExpandLess/> : <ExpandMore/>}
                         </ListItemIcon>
-                    </ListItem>
+                    </ListMenuItem>
                 )
                 yield (
                     <Collapse
@@ -216,16 +201,16 @@ class _SideNavBar extends Component<Props, State> {
                 )
             } else {
                 yield (
-                    <ListItem key={path}
-                              button
-                              selected={this.props.history.location.pathname === path}
-                              onClick={() => this.props.history.push(path)}
-                              className={parentItem ? this.props.classes.nestedItem : ""}>
+                    <ListMenuItem key={path}
+                                  button
+                                  selected={this.props.history.location.pathname === path}
+                                  onClick={() => this.props.history.push(path)}
+                                  className={parentItem ? this.props.classes.nestedItem : ""}>
                         <ListItemIcon>
                             {item.icon}
                         </ListItemIcon>
-                        <ListItemText inset primary={item.title}/>
-                    </ListItem>
+                        <ListItemText inset primary={item.title} color="inherit"/>
+                    </ListMenuItem>
                 )
             }
         }

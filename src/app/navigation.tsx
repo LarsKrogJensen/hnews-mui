@@ -67,24 +67,115 @@ export const navItems: Array<NavItem> = [
         items: [
             {
                 type: "link",
-                title: "Page 5",
+                title: "Page 84",
                 icon: <GutterIcon/>,
-                path: "/page-5",
-                page: () => <SomePage page={5}/>
+                path: "/page-84",
+                page: () => <SomePage page={84}/>
             },
             {
                 type: "link",
-                title: "Page 6",
+                title: "Page 85",
                 icon: <GutterIcon/>,
-                path: "/page-6",
-                page: () => <SomePage page={6}/>
+                path: "/page-85",
+                page: () => <SomePage page={85}/>
             },
             {
                 type: "link",
-                title: "Page 7",
+                title: "Page 86",
                 icon: <GutterIcon/>,
-                path: "/page-7",
-                page: () => <SomePage page={7}/>
+                path: "/page-86",
+                page: () => <SomePage page={86}/>
+            },
+            {
+                type: "link",
+                title: "Page 87",
+                icon: <GutterIcon/>,
+                path: "/page-87",
+                page: () => <SomePage page={87}/>
+            },
+            {
+                type: "link",
+                title: "Page 88",
+                icon: <GutterIcon/>,
+                path: "/page-88",
+                page: () => <SomePage page={88}/>
+            },
+            {
+                type: "link",
+                title: "Page 89",
+                icon: <GutterIcon/>,
+                path: "/page-89",
+                page: () => <SomePage page={89}/>
+            },
+            {
+                type: "link",
+                title: "Page 90",
+                icon: <GutterIcon/>,
+                path: "/page-90",
+                page: () => <SomePage page={90}/>
+            },
+            {
+                type: "link",
+                title: "Page 91",
+                icon: <GutterIcon/>,
+                path: "/page-91",
+                page: () => <SomePage page={91}/>
+            },
+            {
+                type: "link",
+                title: "Page 92",
+                icon: <GutterIcon/>,
+                path: "/page-92",
+                page: () => <SomePage page={92}/>
+            },
+            {
+                type: "link",
+                title: "Page 93",
+                icon: <GutterIcon/>,
+                path: "/page-93",
+                page: () => <SomePage page={93}/>
+            },
+            {
+                type: "link",
+                title: "Page 94",
+                icon: <GutterIcon/>,
+                path: "/page-94",
+                page: () => <SomePage page={94}/>
+            },
+            {
+                type: "link",
+                title: "Page 95",
+                icon: <GutterIcon/>,
+                path: "/page-95",
+                page: () => <SomePage page={95}/>
+            },
+            {
+                type: "link",
+                title: "Page 96",
+                icon: <GutterIcon/>,
+                path: "/page-96",
+                page: () => <SomePage page={96}/>
+            },
+            {
+                type: "link",
+                title: "Page 97",
+                icon: <GutterIcon/>,
+                path: "/page-97",
+                page: () => <SomePage page={97}/>
+            },
+            {
+                type: "link",
+                title: "Page 98",
+                icon: <GutterIcon/>,
+                path: "/page-98",
+                page: () => <SomePage page={98}/>
+            },
+            {
+                type: "link",
+                title: "Page 99",
+                icon: <GutterIcon/>,
+                path: "/page-99",
+                page: () => <SomePage page={99}/>
             },
         ]
     },
@@ -105,9 +196,9 @@ export const navItems: Array<NavItem> = [
 ]
 
 
-export const findItems = (path: string): NavItem[]  => Array.from(traverseItems(path))
+export const findItems = (path: string): NavItem[] => Array.from(traverseItems(path))
 
-function *traverseItems(path: string, items: NavItem[] = navItems, parentItem?: NavItem): IterableIterator<NavItem> {
+function* traverseItems(path: string, items: NavItem[] = navItems, parentItem?: NavItem): IterableIterator<NavItem> {
     for (let item of items) {
         if (item.type === "link") {
             const itemPath = (parentItem ? parentItem.path : "") + item.path
@@ -116,7 +207,7 @@ function *traverseItems(path: string, items: NavItem[] = navItems, parentItem?: 
                 yield item
             }
         } else {
-            yield *traverseItems(path, item.items, item)
+            yield* traverseItems(path, item.items, item)
         }
     }
 }
