@@ -7,9 +7,10 @@ import {createStyles, MuiThemeProvider, Theme, withStyles, WithStyles} from '@ma
 import createMuiTheme from "@material-ui/core/es/styles/createMuiTheme";
 import logo from "./logo.svg"
 import logo_small from "./logo_small.svg"
-import {NavItem, navItems} from "./navigation"
+import {findItems, NavItem, navItems} from "./navigation"
 import {Collapse, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
+import {RouteComponentProps, withRouter} from "react-router";
 
 const drawerWidth = 240;
 
@@ -131,17 +132,32 @@ interface ExternalProps {
 }
 
 interface State {
+    currentPath: string,
     expandedPath: string,
-    selected: string
 }
 
-type Props = ExternalProps & WithStyles<typeof styles>
+type Props = ExternalProps & WithStyles<typeof styles> & RouteComponentProps
 
 
-class SideBarComp extends Component<Props, State> {
+class _SideNavBar extends Component<Props, State> {
     state = {
+        currentPath: this.props.location.pathname,
         expandedPath: "",
-        selected: ""
+    }
+
+    static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
+        if (prevState.currentPath === nextProps.location.pathname) {
+            return prevState
+        }
+
+        let items = findItems(nextProps.location.pathname);
+
+        const expandedPath = (items.length > 0 && items[0].type === "group") ? items[0].path : prevState.expandedPath
+
+        return {
+            currentPath: nextProps.location.pathname,
+            expandedPath
+        }
     }
 
     handleClick = (expandedPath: string) => this.setState({expandedPath})
@@ -161,90 +177,23 @@ class SideBarComp extends Component<Props, State> {
                     </div>
                     <Divider/>
                     <List>
-                        {this.buildNavigationLinks()}
-                        {/*<MenuItem selected>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<DashboardIcon className={!open ? classes.iconBig : classes.iconSmall}/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*{open && <ListItemText primary="Dashboard"/>}*/}
-                        {/*</MenuItem>*/}
-                        {/*<ListItem button onClick={this.handleClick}*/}
-                        {/*className={this.state.expanded ? classes.expanded : ""}*/}
-                        {/*selected={false}>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<InboxIcon/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText inset primary="Inbox"/>*/}
-                        {/*<ListItemIcon className={classes.secondaryIcon}>*/}
-                        {/*{this.state.expanded ? <ExpandLess/> : <ExpandMore/>}*/}
-                        {/*</ListItemIcon>*/}
-                        {/*</ListItem>*/}
-
-                        {/*<Collapse in={this.state.expanded} timeout="auto" unmountOnExit>*/}
-                        {/*<List disablePadding className={classes.expanded}>*/}
-                        {/*<ListItem button className={classes.nestedItem}>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<GutterIcon/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText inset primary="Starred"/>*/}
-                        {/*</ListItem>*/}
-                        {/*<ListItem button className={classes.nestedItem}>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<StarBorder/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText inset primary="Starred"/>*/}
-                        {/*</ListItem>*/}
-                        {/*<ListItem button className={classes.nestedItem}>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<StarBorder/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText inset primary="Starred"/>*/}
-                        {/*</ListItem>*/}
-                        {/*<ListItem button className={classes.nestedItem}>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<StarBorder/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText inset primary="Starred"/>*/}
-                        {/*</ListItem>*/}
-                        {/*</List>*/}
-                        {/*</Collapse>*/}
-                        {/*<ListItem button>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<AssignmentIcon/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText primary="Current month"/>*/}
-                        {/*</ListItem>*/}
-                        {/*<MenuItem>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<AssignmentIcon/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText primary="Last quarter"/>*/}
-                        {/*</MenuItem>*/}
-                        {/*<ListItem button>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<AssignmentIcon/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText primary="Year-end sale"/>*/}
-                        {/*</ListItem>*/}
+                        {Array.from(this.buildNavigationLinks())}
                     </List>
                 </Drawer>
             </MuiThemeProvider>
         )
     }
 
-
-    buildNavigationLinks = (items: NavItem[] = navItems,
-                            parentItem: NavItem | undefined = undefined): ReactElement<any>[] => {
-
-        const elements: ReactElement<any>[] = [];
+    * buildNavigationLinks(items: NavItem[] = navItems,
+                           parentItem: NavItem | undefined = undefined): IterableIterator<ReactElement<any>> {
 
         for (const item of items) {
             const path = (parentItem ? parentItem.path : "") + item.path
             if (item.type === "group") {
-                elements.push(
+                yield (
                     <ListItem key={path}
                               button
-                              onClick={() => this.handleClick(path)}
+                              onClick={() => this.handleClick(this.state.expandedPath === path ? "" : path)}
                               className={this.state.expandedPath === path ? this.props.classes.expanded : ""}
                               selected={false}>
                         <ListItemIcon>
@@ -256,14 +205,22 @@ class SideBarComp extends Component<Props, State> {
                         </ListItemIcon>
                     </ListItem>
                 )
-                elements.push(
-                    <Collapse in={this.state.expandedPath === path} timeout="auto" unmountOnExit>
-                        {this.buildNavigationLinks(item.items, item)}
+                yield (
+                    <Collapse
+                        key={path + "-group"}
+                        in={this.state.expandedPath === path}
+                        timeout="auto"
+                        unmountOnExit>
+                        {Array.from(this.buildNavigationLinks(item.items, item))}
                     </Collapse>
                 )
             } else {
-                elements.push(
-                    <ListItem key={path} button className={parentItem ? this.props.classes.nestedItem: ""}>
+                yield (
+                    <ListItem key={path}
+                              button
+                              selected={this.props.history.location.pathname === path}
+                              onClick={() => this.props.history.push(path)}
+                              className={parentItem ? this.props.classes.nestedItem : ""}>
                         <ListItemIcon>
                             {item.icon}
                         </ListItemIcon>
@@ -272,11 +229,7 @@ class SideBarComp extends Component<Props, State> {
                 )
             }
         }
-
-        return elements
     }
-
-
 }
 
-export const SideBar: ComponentType<ExternalProps> = withStyles(styles)(SideBarComp)
+export const SideNavBar: ComponentType<ExternalProps> = withStyles(styles)(withRouter(_SideNavBar))

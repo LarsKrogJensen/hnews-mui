@@ -58,7 +58,7 @@ interface ExternalProps {
 
 type Props = ExternalProps & WithStyles<typeof styles>
 
-const _NavBar: FC<Props> = ({open, onToggleDrawer, classes}) => {
+const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes}) => {
     return (
         <AppBar
             position="absolute"
@@ -95,4 +95,4 @@ const _NavBar: FC<Props> = ({open, onToggleDrawer, classes}) => {
     )
 }
 
-export const NavBar: ComponentType<ExternalProps> = withStyles(styles)(_NavBar)
+export const HeaderBar: ComponentType<ExternalProps> = withStyles(styles)(_HeaderBar)

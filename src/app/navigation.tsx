@@ -1,7 +1,7 @@
 import React, {ReactElement} from "react"
-import {Dashboard} from '@material-ui/icons';
+import {Dashboard, KeyboardArrowRight as GutterIcon} from '@material-ui/icons';
 
-import {RouterProps} from "react-router";
+import {RouteComponentProps} from "react-router";
 import SomePage from "../pages/SomePage";
 
 interface NavItemBase {
@@ -12,7 +12,7 @@ interface NavItemBase {
 
 interface NavLinkItem extends NavItemBase {
     type: "link",
-    page: (props: RouterProps) => ReactElement<any>
+    page: (prop: RouteComponentProps<any>) => ReactElement<any>
 }
 
 interface NavGroupItem extends NavItemBase {
@@ -39,21 +39,21 @@ export const navItems: Array<NavItem> = [
             {
                 type: "link",
                 title: "Page 2",
-                icon: <Dashboard/>,
+                icon: <GutterIcon/>,
                 path: "/page-2",
                 page: () => <SomePage page={2}/>
             },
             {
                 type: "link",
                 title: "Page 3",
-                icon: <Dashboard/>,
+                icon: <GutterIcon/>,
                 path: "/page-3",
                 page: () => <SomePage page={3}/>
             },
             {
                 type: "link",
                 title: "Page 4",
-                icon: <Dashboard/>,
+                icon: <GutterIcon/>,
                 path: "/page-4",
                 page: () => <SomePage page={4}/>
             },
@@ -68,21 +68,21 @@ export const navItems: Array<NavItem> = [
             {
                 type: "link",
                 title: "Page 5",
-                icon: <Dashboard/>,
+                icon: <GutterIcon/>,
                 path: "/page-5",
                 page: () => <SomePage page={5}/>
             },
             {
                 type: "link",
                 title: "Page 6",
-                icon: <Dashboard/>,
+                icon: <GutterIcon/>,
                 path: "/page-6",
                 page: () => <SomePage page={6}/>
             },
             {
                 type: "link",
                 title: "Page 7",
-                icon: <Dashboard/>,
+                icon: <GutterIcon/>,
                 path: "/page-7",
                 page: () => <SomePage page={7}/>
             },
@@ -103,3 +103,20 @@ export const navItems: Array<NavItem> = [
         page: () => <SomePage page={9}/>
     }
 ]
+
+
+export const findItems = (path: string): NavItem[]  => Array.from(traverseItems(path))
+
+function *traverseItems(path: string, items: NavItem[] = navItems, parentItem?: NavItem): IterableIterator<NavItem> {
+    for (let item of items) {
+        if (item.type === "link") {
+            const itemPath = (parentItem ? parentItem.path : "") + item.path
+            if (itemPath === path) {
+                if (parentItem) yield  parentItem
+                yield item
+            }
+        } else {
+            yield *traverseItems(path, item.items, item)
+        }
+    }
+}

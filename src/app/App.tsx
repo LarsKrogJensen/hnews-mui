@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import {createStyles, MuiThemeProvider, Theme, WithStyles, withStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {SideBar} from "./SideBar";
+import {SideNavBar} from "./SideNavBar";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import {purple} from "@material-ui/core/colors";
-import {NavBar} from "./NavBar";
-import {Redirect, Route, Switch, HashRouter as Router} from "react-router-dom";
-import SomePage from "../pages/SomePage";
+import {HeaderBar} from "./HeaderBar";
+import {HashRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import {NavItem, navItems} from "./navigation";
 
 
 const theme = createMuiTheme({
@@ -49,20 +49,12 @@ const App = ({classes}: Props) => {
             <Router>
                 <div className={classes.root}>
                     <CssBaseline/>
-                    <NavBar open={drawerOpen} onToggleDrawer={() => setDrawerOpen(!drawerOpen)}/>
-                    <SideBar open={drawerOpen}/>
+                    <HeaderBar open={drawerOpen} onToggleDrawer={() => setDrawerOpen(!drawerOpen)}/>
+                    <SideNavBar open={drawerOpen}/>
                     <main className={classes.content}>
                         <div className={classes.appBarSpacer}/>
                         <Switch>
-                            <Redirect exact path="/" to="/page-1"/>
-                            <Route path="/page-1" component={() => <SomePage page={1}/>}/>
-                            <Route path="/page-2" component={() => <SomePage page={2}/>}/>
-                            <Route path="/page-3" component={() => <SomePage page={3}/>}/>
-                            <Route path="/page-4" component={() => <SomePage page={4}/>}/>
-                            <Route path="/page-5" component={() => <SomePage page={5}/>}/>
-                            <Route path="/page-6" component={() => <SomePage page={6}/>}/>
-                            <Route path="/page-7" component={() => <SomePage page={7}/>}/>
-                            <Route component={() => <SomePage page={-1}/>}/>
+                            {Array.from(buildRoutes())}
                         </Switch>
 
                     </main>
@@ -70,6 +62,20 @@ const App = ({classes}: Props) => {
             </Router>
         </MuiThemeProvider>
     );
+}
+
+function* buildRoutes(items: NavItem[] = navItems, parentItem: NavItem | undefined = undefined): IterableIterator<ReactElement<any>> {
+    for (let item of items) {
+        const path = (parentItem ? parentItem.path : "")  + item.path
+        if (item.type === "link") {
+            console.log(`Link to ${path} page ${item.title}`)
+            yield <Route key={path} path={path} component={item.page}/>
+        } else {
+            console.log(`Group to ${path} page ${item.title}`)
+            yield <Redirect key={path} exact path={path} to={path + item.items[0].path}/>
+            yield *buildRoutes(item.items, item)
+        }
+    }
 
 }
 
