@@ -1,8 +1,8 @@
 import React, {ReactElement} from "react"
-import {Dashboard, KeyboardArrowRight as GutterIcon} from '@material-ui/icons';
+import {Dashboard, SmokeFree, ChildCare, FilterVintage, Toys, KeyboardArrowRight as GutterIcon} from '@material-ui/icons';
 
 import {RouteComponentProps} from "react-router";
-import SomePage from "../pages/SomePage";
+import SomePage from "../pages/SamplePage";
 
 interface NavItemBase {
     title: string,
@@ -33,7 +33,7 @@ export const navItems: Array<NavItem> = [
     {
         type: "group",
         title: "Nested",
-        icon: <Dashboard/>,
+        icon: <SmokeFree/>,
         path: "/nested",
         items: [
             {
@@ -62,7 +62,7 @@ export const navItems: Array<NavItem> = [
     {
         type: "group",
         title: "Nested Again",
-        icon: <Dashboard/>,
+        icon: <ChildCare/>,
         path: "/nested_again",
         items: [
             {
@@ -182,14 +182,14 @@ export const navItems: Array<NavItem> = [
     {
         type: "link",
         title: "About",
-        icon: <Dashboard/>,
+        icon: <Toys/>,
         path: "/about",
         page: () => <SomePage page={8}/>
     },
     {
         type: "link",
         title: "Contact",
-        icon: <Dashboard/>,
+        icon: <FilterVintage/>,
         path: "/contact",
         page: () => <SomePage page={9}/>
     }

@@ -11,19 +11,17 @@ import {findItems} from "./navigation";
 import {RouteComponentProps, withRouter} from "react-router";
 
 const drawerWidth = 240;
-const miniDrawerWidth = 72;
-
 
 const styles = (theme: Theme) => createStyles({
     toolbar: {
         paddingLeft: 0,
         paddingRight: 24, // keep right padding when drawer closed
-        height: 60,  // how to get the appbar height from theme....?
-        minHeight: 60, // how to get the appbar height from theme....?
+        maxHeight: theme.mixins.toolbar.maxHeight,
+        minHeight: theme.mixins.toolbar.maxHeight,
     },
     appBar: {
-        marginLeft: miniDrawerWidth,
-        width: `calc(100% - ${miniDrawerWidth}px)`,
+        marginLeft: theme.spacing.unit * 7,
+        width: `calc(100% - ${theme.spacing.unit * 7}px)`,
         backgroundColor: "#fff",
         color: "#555",
         zIndex: theme.zIndex.drawer + 1,
@@ -44,22 +42,17 @@ const styles = (theme: Theme) => createStyles({
         marginLeft: 12,
         marginRight: 36,
     },
-    menuButtonHidden: {
-        display: 'none',
-    },
-    titles: {
+    titleRow: {
         flexGrow: 1,
         flexDirection: "row",
         alignItems: "baseline"
     },
     title: {
         display: 'inline-flex',
-        // flexGrow: 0,
         marginRight: 8
     },
     subTitle: {
         display: 'inline-flex',
-        // flexGrow: 1,
     },
 });
 
@@ -87,7 +80,7 @@ const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes, location}) => {
                 >
                     <MenuIcon/>
                 </IconButton>
-                <div className={classes.titles}>
+                <div className={classes.titleRow}>
                     <Typography
                         component="h1"
                         variant="h6"

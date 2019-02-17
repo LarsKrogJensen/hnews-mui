@@ -31,7 +31,7 @@ const theme: any = (theme: Theme) => createMuiTheme({
         MuiPaper: {
             root: {
                 backgroundColor: '#343A40',
-                '& *': { color: '#a1a1a1' },
+                '& *': {color: '#a1a1a1'},
             }
         },
         MuiSvgIcon: {
@@ -95,18 +95,14 @@ const styles = (theme: Theme) => createStyles(
             marginRight: 0
         },
         iconBig: {
-            fontSize: 24,
-            // transition: theme.transitions.create('fontSize', {
-            //     easing: theme.transitions.easing.easeInOut,
-            //     duration: theme.transitions.duration.enteringScreen,
-            // }),
+            '& *': {
+                fontSize: 24
+            },
         },
         iconSmall: {
-            fontSize: 18,
-            // transition: theme.transitions.create('fontSize', {
-            //     easing: theme.transitions.easing.easeInOut,
-            //     duration: theme.transitions.duration.enteringScreen,
-            // }),
+            '& *': {
+                fontSize: 18
+            },
         },
     }
 );
@@ -171,29 +167,31 @@ class _SideNavBar extends Component<Props, State> {
 
     * buildNavigationLinks(items: NavItem[] = navItems,
                            parentItem: NavItem | undefined = undefined): IterableIterator<ReactElement<any>> {
+        const {classes} = this.props
 
         for (const item of items) {
             const path = (parentItem ? parentItem.path : "") + item.path
             if (item.type === "group") {
+                const isExpanded = this.state.expandedPath === path;
                 yield (
                     <ListMenuItem key={path}
-                              button
-                              onClick={() => this.handleToggleSection(this.state.expandedPath === path ? "" : path)}
-                              className={this.state.expandedPath === path ? this.props.classes.expanded : ""}
-                              selected={false}>
-                        <ListItemIcon>
+                                  button
+                                  onClick={() => this.handleToggleSection(isExpanded ? "" : path)}
+                                  className={isExpanded ? classes.expanded : ""}
+                                  selected={false}>
+                        <ListItemIcon className={this.props.open ? classes.iconSmall : classes.iconBig}>
                             {item.icon}
                         </ListItemIcon>
                         <ListItemText inset primary={item.title}/>
-                        <ListItemIcon className={this.props.classes.secondaryIcon}>
-                            {this.state.expandedPath === path ? <ExpandLess/> : <ExpandMore/>}
+                        <ListItemIcon className={classes.secondaryIcon}>
+                            {isExpanded ? <ExpandLess/> : <ExpandMore/>}
                         </ListItemIcon>
                     </ListMenuItem>
                 )
                 yield (
                     <Collapse
                         key={path + "-group"}
-                        in={this.state.expandedPath === path}
+                        in={isExpanded}
                         timeout="auto"
                         unmountOnExit>
                         {Array.from(this.buildNavigationLinks(item.items, item))}
@@ -205,8 +203,8 @@ class _SideNavBar extends Component<Props, State> {
                                   button
                                   selected={this.props.history.location.pathname === path}
                                   onClick={() => this.props.history.push(path)}
-                                  className={parentItem ? this.props.classes.nestedItem : ""}>
-                        <ListItemIcon>
+                                  className={parentItem && this.props.open ? this.props.classes.nestedItem : ""}>
+                        <ListItemIcon className={this.props.open ? classes.iconSmall : classes.iconBig}>
                             {item.icon}
                         </ListItemIcon>
                         <ListItemText inset primary={item.title} color="inherit"/>

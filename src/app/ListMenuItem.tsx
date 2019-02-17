@@ -19,12 +19,12 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-const _MenuItem: ComponentType<ListItemProps & WithStyles<typeof styles>> = ({children, classes, ...other}) => {
+const _ListMenuItem: ComponentType<ListItemProps & WithStyles<typeof styles>> = ({children, ...props}) => {
     return (
-        <ListItem button classes={classes} {...other}>
+        <ListItem button {...props}>
             {children}
         </ListItem>
     )
 }
 
-export const ListMenuItem: ComponentType<ListItemProps> = withStyles(styles)(_MenuItem);
+export const ListMenuItem: ComponentType<ListItemProps> = withStyles(styles)(_ListMenuItem);
