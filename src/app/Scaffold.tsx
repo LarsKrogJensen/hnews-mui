@@ -7,6 +7,7 @@ import {Redirect, Route, Switch} from "react-router-dom";
 import {NavItem, navItems} from "./navigation";
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import {ScrollToTop} from "../components/ScrollToTop";
+import {NotFoundPage} from "../pages/NotFoundPage";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -35,6 +36,7 @@ const _Scaffold = ({classes}: Props) => {
             <CssBaseline/>
             <HeaderBar open={drawerOpen} onToggleDrawer={() => setDrawerOpen(!drawerOpen)}/>
             <SideNavBar open={drawerOpen}/>
+
             <main className={classes.content}>
                 <div className={classes.appBarSpacer}/>
                 <div className={classes.scrollContent}>
@@ -47,11 +49,15 @@ const _Scaffold = ({classes}: Props) => {
                     </ScrollToTop>
                 </div>
             </main>
+
         </div>
     );
 }
 
 function* buildRoutes(items: NavItem[] = navItems, parentItem?: NavItem): IterableIterator<ReactElement<any>> {
+    if (!parentItem) {
+        yield <Redirect key="/" exact path="/" to={items[0].path}/>
+    }
     for (let item of items) {
         const path = (parentItem ? parentItem.path : "") + item.path
         if (item.type === "link") {
@@ -60,6 +66,9 @@ function* buildRoutes(items: NavItem[] = navItems, parentItem?: NavItem): Iterab
             yield <Redirect key={path} exact path={path} to={path + item.items[0].path}/>
             yield* buildRoutes(item.items, item)
         }
+    }
+    if (!parentItem) {
+        yield <Route key="not-found" component={NotFoundPage}/>
     }
 }
 

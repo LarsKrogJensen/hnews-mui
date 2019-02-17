@@ -1,14 +1,13 @@
 import React, {ComponentType, FC} from "react"
-import {AppBar, createStyles, Theme, Toolbar, withStyles, WithStyles} from "@material-ui/core";
+import {AppBar, createStyles, Theme, Toolbar, Tooltip, withStyles, WithStyles} from "@material-ui/core";
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
-import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import classNames from "classnames";
 import {findItems} from "./navigation";
 import {RouteComponentProps, withRouter} from "react-router";
+import {ExitToApp as SignOutIcon, Menu as MenuIcon} from "@material-ui/icons";
 
 const drawerWidth = 240;
 
@@ -16,12 +15,10 @@ const styles = (theme: Theme) => createStyles({
     toolbar: {
         paddingLeft: 0,
         paddingRight: 24, // keep right padding when drawer closed
-        maxHeight: theme.mixins.toolbar.maxHeight,
-        minHeight: theme.mixins.toolbar.maxHeight,
     },
     appBar: {
-        marginLeft: theme.spacing.unit * 7,
-        width: `calc(100% - ${theme.spacing.unit * 7}px)`,
+        marginLeft: 72,
+        width: `calc(100% - 72px)`,
         backgroundColor: "#fff",
         color: "#555",
         zIndex: theme.zIndex.drawer + 1,
@@ -43,6 +40,7 @@ const styles = (theme: Theme) => createStyles({
         marginRight: 36,
     },
     titleRow: {
+        display: "flex",
         flexGrow: 1,
         flexDirection: "row",
         alignItems: "baseline"
@@ -52,8 +50,12 @@ const styles = (theme: Theme) => createStyles({
         marginRight: 8
     },
     subTitle: {
+        flexGrow: 1,
         display: 'inline-flex',
     },
+    admin: {
+        display: 'inline-flex',
+    }
 });
 
 
@@ -76,7 +78,7 @@ const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes, location}) => {
                     color="inherit"
                     aria-label="Open drawer"
                     onClick={onToggleDrawer}
-                    className={classes.menuButton}
+                    className={classNames(classes.menuButton)}
                 >
                     <MenuIcon/>
                 </IconButton>
@@ -99,11 +101,20 @@ const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes, location}) => {
                     >
                         {subTitle}
                     </Typography>
+                    <Typography
+                        component="h1"
+                        variant="subtitle2"
+                        color="inherit"
+                        noWrap
+                        className={classes.admin}
+                    >
+                        Admin Andersson
+                    </Typography>
                 </div>
                 <IconButton color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                        <NotificationsIcon/>
-                    </Badge>
+                    <Tooltip title="Sign out from Offering Manager">
+                        <SignOutIcon/>
+                    </Tooltip>
                 </IconButton>
             </Toolbar>
         </AppBar>

@@ -53,8 +53,7 @@ const styles = (theme: Theme) => createStyles(
             position: 'relative',
             whiteSpace: 'nowrap',
             borderRight: 0,
-            zIndex: 9999,
-            width: drawerWidth,
+            width: drawerWidth, // How to theme this bastard
             height: "100%",
             overflowY: "hidden",
             transition: theme.transitions.create('width', {
@@ -68,10 +67,7 @@ const styles = (theme: Theme) => createStyles(
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
-            width: theme.spacing.unit * 7,
-            [theme.breakpoints.up('sm')]: {
-                width: theme.spacing.unit * 9,
-            },
+            width: 72 // How to theme this bastard
         },
         logo: {
             display: 'flex',
@@ -79,8 +75,8 @@ const styles = (theme: Theme) => createStyles(
             justifyContent: 'center',
             padding: '0 8px',
             background: theme.palette.primary.dark,
-            height: 60,
-            minHeight: 60,
+            height: theme.mixins.toolbar.maxHeight,
+            minHeight: theme.mixins.toolbar.minHeight,
             borderRadius: 0
         },
         nestedItem: {

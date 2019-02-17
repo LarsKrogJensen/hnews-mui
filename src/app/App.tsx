@@ -24,6 +24,16 @@ const theme = createMuiTheme({
     },
     typography: {
         useNextVariants: true
+    },
+    overrides: {
+        MuiDrawer: {
+            paper: {
+                width: 240
+            },
+            docked: {
+                width: 72
+            }
+        }
     }
 });
 
