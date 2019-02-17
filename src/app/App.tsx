@@ -8,6 +8,7 @@ import {HeaderBar} from "./HeaderBar";
 import {HashRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import {NavItem, navItems} from "./navigation";
 import PerfectScrollbar from 'react-perfect-scrollbar'
+import {ScrollToTop} from "../components/ScrollToTop";
 
 const theme = createMuiTheme({
     palette: {
@@ -35,10 +36,12 @@ const styles = (theme: Theme) => createStyles({
     content: {
         flexGrow: 1,
         padding: 0,
-        height: '100vh',
-        // width: `calc(100vh - 16px)`,
+        height: `100vh`,
         overflow: 'hidden',
     },
+    scrollContent: {
+        height: `calc(100% - 60px)`, // how to get the appbar height from theme....?
+    }
 });
 
 type Props = WithStyles<typeof styles>
@@ -48,6 +51,7 @@ const App = ({classes}: Props) => {
 
     return (
         <MuiThemeProvider theme={theme}>
+
             <Router>
                 <div className={classes.root}>
                     <CssBaseline/>
@@ -55,11 +59,15 @@ const App = ({classes}: Props) => {
                     <SideNavBar open={drawerOpen}/>
                     <main className={classes.content}>
                         <div className={classes.appBarSpacer}/>
-                        <PerfectScrollbar>
-                            <Switch>
-                                {Array.from(buildRoutes())}
-                            </Switch>
-                        </PerfectScrollbar>
+                        <div className={classes.scrollContent}>
+                            <ScrollToTop>
+                                <PerfectScrollbar>
+                                    <Switch>
+                                        {Array.from(buildRoutes())}
+                                    </Switch>
+                                </PerfectScrollbar>
+                            </ScrollToTop>
+                        </div>
                     </main>
                 </div>
             </Router>

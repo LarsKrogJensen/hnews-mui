@@ -18,8 +18,8 @@ const styles = (theme: Theme) => createStyles({
     toolbar: {
         paddingLeft: 0,
         paddingRight: 24, // keep right padding when drawer closed
-        height: 60,
-        minHeight: 60,
+        height: 60,  // how to get the appbar height from theme....?
+        minHeight: 60, // how to get the appbar height from theme....?
     },
     appBar: {
         marginLeft: miniDrawerWidth,
@@ -83,10 +83,7 @@ const _HeaderBar: FC<Props> = ({open, onToggleDrawer, classes, location}) => {
                     color="inherit"
                     aria-label="Open drawer"
                     onClick={onToggleDrawer}
-                    className={classNames(
-                        classes.menuButton,
-                        // this.state.open && classes.menuButtonHidden,
-                    )}
+                    className={classes.menuButton}
                 >
                     <MenuIcon/>
                 </IconButton>
