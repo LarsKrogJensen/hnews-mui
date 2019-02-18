@@ -14,8 +14,7 @@ const theme = createMuiTheme({
         secondary: purple,
         background: {
             default: "#F5F5F5"
-        }
-    },
+        }},
     mixins: {
         toolbar: {
             minHeight: 60,
@@ -25,16 +24,7 @@ const theme = createMuiTheme({
     typography: {
         useNextVariants: true
     },
-    overrides: {
-        MuiDrawer: {
-            paper: {
-                width: 240
-            },
-            docked: {
-                width: 72
-            }
-        }
-    }
+   
 });
 
 export default () => {

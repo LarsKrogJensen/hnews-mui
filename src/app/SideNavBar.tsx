@@ -145,8 +145,7 @@ class _SideNavBar extends Component<Props, State> {
                 <Drawer
                     variant="permanent"
                     classes={{paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose),}}
-                    open={open}
-                >
+                    open={open}>
                     <div className={classes.logo}>
                         {!open && <img height={40} src={logo_small} alt="logo"/>}
                         {open && <img width={120} src={logo} alt="logo"/>}

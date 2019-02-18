@@ -5,9 +5,8 @@ import App from "./app/App";
 
 const rootEl = document.getElementById('root')
 
-ReactDOM.render(<App />, rootEl);
+ReactDOM.render(<App/>, rootEl);
 
-// const mod: any = module
 if ((module as any).hot) {
     (module as any).hot.accept('./app/App', () => {
     const NextApp = require('./app/App').default
