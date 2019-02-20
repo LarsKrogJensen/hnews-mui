@@ -1,7 +1,7 @@
 import React, {ComponentType, ReactElement, useState} from 'react';
 import {createStyles, Theme, WithStyles, withStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import {SideNavBar} from "./SideNavBar";
+import {Navigator} from "./Navigator";
 import {HeaderBar} from "./HeaderBar";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {NavItem, navItems} from "./navigation";
@@ -35,7 +35,7 @@ const _Scaffold = ({classes}: Props) => {
         <div className={classes.root}>
             <CssBaseline/>
             <HeaderBar open={drawerOpen} onToggleDrawer={() => setDrawerOpen(!drawerOpen)}/>
-            <SideNavBar open={drawerOpen}/>
+            <Navigator open={drawerOpen}/>
 
             <main className={classes.content}>
                 <div className={classes.appBarSpacer}/>

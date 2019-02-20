@@ -3,19 +3,20 @@ import {Dashboard, SmokeFree, ChildCare, FilterVintage, Toys, KeyboardArrowRight
 
 import {RouteComponentProps} from "react-router";
 import SomePage from "../pages/SamplePage";
+import ReactVirtualizedTable from "../pages/VirtualizedTableDemo";
 
-interface NavItemBase {
+export interface NavItemBase {
     title: string,
     icon: ReactElement<any>,
     path: string,
 }
 
-interface NavLinkItem extends NavItemBase {
+export interface NavLinkItem extends NavItemBase {
     type: "link",
     page: (prop: RouteComponentProps<any>) => ReactElement<any>
 }
 
-interface NavGroupItem extends NavItemBase {
+export interface NavGroupItem extends NavItemBase {
     type: "group",
     items: Array<NavLinkItem>
 }
@@ -28,7 +29,7 @@ export const navItems: Array<NavItem> = [
         title: "Start",
         icon: <Dashboard/>,
         path: "/page-1",
-        page: () => <SomePage page={1}/>
+        page: () => <ReactVirtualizedTable/>
     },
     {
         type: "group",

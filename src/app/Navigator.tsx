@@ -67,7 +67,7 @@ const styles = (theme: Theme) => createStyles(
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
-            width: 72 // How to theme this bastard
+            width: theme.spacing.unit * 9
         },
         logo: {
             display: 'flex',
@@ -115,7 +115,7 @@ interface State {
 type Props = ExternalProps & WithStyles<typeof styles> & RouteComponentProps
 
 
-class _SideNavBar extends Component<Props, State> {
+class _Navigator extends Component<Props, State> {
     state = {
         currentPath: this.props.location.pathname,
         expandedPath: "",
@@ -210,4 +210,4 @@ class _SideNavBar extends Component<Props, State> {
     }
 }
 
-export const SideNavBar: ComponentType<ExternalProps> = withStyles(styles)(withRouter(_SideNavBar))
+export const Navigator: ComponentType<ExternalProps> = withStyles(styles)(withRouter(_Navigator))
