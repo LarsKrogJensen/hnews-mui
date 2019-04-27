@@ -2,7 +2,6 @@ import React, {ComponentType, FC} from "react"
 import {AppBar, createStyles, Theme, Toolbar, Tooltip, withStyles, WithStyles} from "@material-ui/core";
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 
 import classNames from "classnames";
 import {findItems} from "./navigation";

@@ -1,8 +1,7 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import {RowMouseEventHandlerParams} from 'react-virtualized';
-import {IColumnProps, VirtualizedTable} from "../components/VirtualizedTable";
-
+import {IColumnProps, VirtualizedTable} from "components/VirtualizedTable";
 
 interface Data {
     id: number,
@@ -43,31 +42,36 @@ function ReactVirtualizedTable() {
             flexGrow: 1.0,
             label: 'Dessert',
             dataKey: 'dessert',
-            numeric: false
+            numeric: false,
+            disableSort: false
         },
         {
             width: 120,
             label: 'Calories (g)',
             dataKey: 'calories',
             numeric: true,
+            disableSort: false
         },
         {
             width: 120,
             label: 'Fat (g)',
             dataKey: 'fat',
             numeric: true,
+            disableSort: false,
         },
         {
             width: 120,
             label: 'Carbs (g)',
             dataKey: 'carbs',
             numeric: true,
+            disableSort: false
         },
         {
             width: 120,
             label: 'Protein (g)',
             dataKey: 'protein',
             numeric: true,
+            disableSort: false
         },
     ];
     return (
@@ -76,6 +80,8 @@ function ReactVirtualizedTable() {
                 <VirtualizedTable
                     onRowClick={(event: RowMouseEventHandlerParams) => console.log(event)}
                     columns={columns}
+                    sortBy='fat'
+                    sortDirection={"ASC"}
                     data={rows}
                 />
             </Paper>

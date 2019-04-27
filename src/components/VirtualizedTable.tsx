@@ -121,11 +121,13 @@ class MuiVirtualizedTable extends React.PureComponent<ExternalProps & WithStyles
     };
 
     render() {
-        const {classes, columns, data, rowHeight, headerHeight} = this.props;
+        const {classes, columns, data, rowHeight, headerHeight, sortDirection, sortBy} = this.props;
         return (
             <AutoSizer>
                 {({height, width}) => (
                     <Table
+                        sortDirection={sortDirection}
+                        sortBy={sortBy}
                         rowCount={data.length}
                         rowGetter={({index}) => data[index]}
                         className={classes.table}

@@ -2,8 +2,8 @@ import React, {ReactElement} from "react"
 import {Dashboard, SmokeFree, ChildCare, FilterVintage, Toys, KeyboardArrowRight as GutterIcon} from '@material-ui/icons';
 
 import {RouteComponentProps} from "react-router";
-import SomePage from "../pages/SamplePage";
-import ReactVirtualizedTable from "../pages/VirtualizedTableDemo";
+import SomePage from "pages/SamplePage";
+import ReactVirtualizedTable from "pages/VirtualizedTableDemo";
 
 export interface NavItemBase {
     title: string,

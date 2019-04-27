@@ -6,8 +6,8 @@ import {HeaderBar} from "./HeaderBar";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {NavItem, navItems} from "./navigation";
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import {ScrollToTop} from "../components/ScrollToTop";
-import {NotFoundPage} from "../pages/NotFoundPage";
+import {ScrollToTop} from "components/ScrollToTop";
+import {NotFoundPage} from "pages/NotFoundPage";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -49,7 +49,6 @@ const _Scaffold = ({classes}: Props) => {
                     </ScrollToTop>
                 </div>
             </main>
-
         </div>
     );
 }
