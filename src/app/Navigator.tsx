@@ -1,12 +1,10 @@
 import React, {Component, ComponentType, ReactElement} from "react"
 import {RouteComponentProps, withRouter} from "react-router";
-import {createStyles, MuiThemeProvider, Theme, withStyles, WithStyles} from '@material-ui/core/styles';
-import createMuiTheme from "@material-ui/core/es/styles/createMuiTheme";
+import {createMuiTheme, createStyles, MuiThemeProvider, Theme, withStyles, WithStyles} from '@material-ui/core/styles';
 import classNames from "classnames";
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
 import {findItems, NavItem, navItems} from "./navigation"
-import {Collapse, ListItemIcon, ListItemText} from "@material-ui/core";
+import {Collapse, ListItemIcon, ListItemText, List} from "@material-ui/core";
 import {ExpandLess, ExpandMore} from "@material-ui/icons";
 import {ListMenuItem} from "./ListMenuItem";
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -25,7 +23,6 @@ const theme: any = (theme: Theme) => createMuiTheme({
     typography: {
         fontSize: 12,
         fontFamily: "Roboto",
-        useNextVariants: true
     },
     overrides: {
         MuiPaper: {
@@ -42,7 +39,7 @@ const theme: any = (theme: Theme) => createMuiTheme({
         MuiListItemText: {
             primary: {
                 color: '#a1a1a1',
-            }
+            },
         }
     }
 });
@@ -67,7 +64,7 @@ const styles = (theme: Theme) => createStyles(
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
-            width: theme.spacing.unit * 9
+            width: theme.spacing(9)
         },
         logo: {
             display: 'flex',
@@ -80,7 +77,7 @@ const styles = (theme: Theme) => createStyles(
             borderRadius: 0
         },
         nestedItem: {
-            paddingLeft: theme.spacing.unit * 4,
+            paddingLeft: theme.spacing(4),
             background: '#2F3439'
         },
         expanded: {
@@ -151,7 +148,7 @@ class _Navigator extends Component<Props, State> {
                         {open && <img width={120} src={logo} alt="logo"/>}
                     </div>
                     <PerfectScrollbar>
-                        <List>
+                        <List component="ul">
                             {Array.from(this.buildNavigationLinks())}
                         </List>
                     </PerfectScrollbar>
@@ -177,7 +174,7 @@ class _Navigator extends Component<Props, State> {
                         <ListItemIcon className={this.props.open ? classes.iconSmall : classes.iconBig}>
                             {item.icon}
                         </ListItemIcon>
-                        <ListItemText inset primary={item.title}/>
+                        <ListItemText primary={item.title}/>
                         <ListItemIcon className={classes.secondaryIcon}>
                             {isExpanded ? <ExpandLess/> : <ExpandMore/>}
                         </ListItemIcon>
@@ -202,7 +199,7 @@ class _Navigator extends Component<Props, State> {
                         <ListItemIcon className={this.props.open ? classes.iconSmall : classes.iconBig}>
                             {item.icon}
                         </ListItemIcon>
-                        <ListItemText inset primary={item.title} color="inherit"/>
+                        <ListItemText primary={item.title} color="inherit"/>
                     </ListMenuItem>
                 )
             }

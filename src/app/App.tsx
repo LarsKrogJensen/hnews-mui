@@ -20,11 +20,7 @@ const theme = createMuiTheme({
             minHeight: 60,
             maxHeight: 60
         }
-    },
-    typography: {
-        useNextVariants: true
-    },
-   
+    }
 });
 
 export default () => {

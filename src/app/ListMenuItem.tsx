@@ -1,7 +1,5 @@
-import React, {ComponentType} from "react"
 import {createStyles, Theme, withStyles} from "@material-ui/core";
-import {WithStyles} from "@material-ui/core/es";
-import ListItem, {ListItemProps} from "@material-ui/core/ListItem";
+import ListItem from "@material-ui/core/ListItem";
 
 const styles = (theme: Theme) => createStyles({
     root: {
@@ -19,12 +17,12 @@ const styles = (theme: Theme) => createStyles({
 });
 
 
-const _ListMenuItem: ComponentType<ListItemProps & WithStyles<typeof styles>> = ({children, ...props}) => {
-    return (
-        <ListItem button {...props}>
-            {children}
-        </ListItem>
-    )
-}
+// const _ListMenuItem: ComponentType<ListItemProps & WithStyles<typeof styles>> = ({children, ...props}) => {
+//     return (
+//         <ListItem component="li" {...props}>
+//             {children}
+//         </ListItem>
+//     )
+// }
 
-export const ListMenuItem: ComponentType<ListItemProps> = withStyles(styles)(_ListMenuItem);
+export const ListMenuItem = withStyles(styles)(ListItem);
